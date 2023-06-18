@@ -140,13 +140,13 @@ def main():
     # driver_path = '/path/to/driver'
     driver = webdriver.Chrome(ChromeDriverManager().install())
     
-    base_url = 'http://...'
+    base_url = 'https://booking.uz.gov.ua/'
     
     # Відкриваємо початкову сторінку
     driver.get(base_url)
                
     # Знаходимо кнопку за атрибутами data-from-code та data-to-code
-    button = driver.find_element_by_css_selector('button[data-from-code="2200001"][data-to-code="2218000"]'))
+    button = driver.find_element_by_css_selector('button[data-from-code="2200001"][data-to-code="2218000"]')
 
     # Натискаємо на кнопку
     button.click()
