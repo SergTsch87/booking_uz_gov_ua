@@ -1,11 +1,8 @@
 #!usr/bin/env
 import json
 import csv
-import xmltodict
 import requests # для отримання html-коду веб-сторінки за її URL'ом
 from urllib.request import urlopen
-
-from bs4 import BeautifulSoup
 
 from datetime import datetime
 
@@ -146,7 +143,13 @@ def main():
     driver.get(base_url)
                
     # Знаходимо кнопку за атрибутами data-from-code та data-to-code
-    button = driver.find_element_by_css_selector('button[data-from-code="2200001"][data-to-code="2218000"]')
+    # button = driver.find_element_by_css_selector('button[data-from-code="2200001"][data-to-code="2218000"]')
+    button = driver.find_element_by_css_selector(
+                button[
+                    'submit'
+                    ]
+                )
+
 
     # Натискаємо на кнопку
     button.click()
