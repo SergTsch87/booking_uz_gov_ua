@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 # Отримуємо код html-сторінки
@@ -136,6 +137,8 @@ def get_sortedDict(dictionary):
 # ---------------------------------------------------------------------------
 
 def main():
+    driver_path = '/path/to/driver'
+
     base_url = 'http://...'
     response = requests.get(base_url)
 
