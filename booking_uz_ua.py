@@ -137,7 +137,8 @@ def get_sortedDict(dictionary):
 # ---------------------------------------------------------------------------
 
 def main():
-    driver_path = '/path/to/driver'
+    # driver_path = '/path/to/driver'
+    driver = webdriver.Chrome(ChromeDriverManager().install())
 
     base_url = 'http://...'
     response = requests.get(base_url)
