@@ -9,6 +9,8 @@ from bs4 import BeautifulSoup
 
 from datetime import datetime
 
+from selenium import webdriver
+
 
 # Отримуємо код html-сторінки
 def get_html(url):
