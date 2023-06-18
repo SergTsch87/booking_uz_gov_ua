@@ -139,19 +139,32 @@ def get_sortedDict(dictionary):
 def main():
     # driver_path = '/path/to/driver'
     driver = webdriver.Chrome(ChromeDriverManager().install())
-
+    
     base_url = 'http://...'
-    response = requests.get(base_url)
+    
+    # Відкриваємо початкову сторінку
+    driver.get(base_url)
+               
+    # Знаходимо кнопку за атрибутами data-from-code та data-to-code
+	button = driver.find_element_by_css_selector('button[data-from-code="2200001"][data-to-code="2218000"]'))
 
-    if response.status_code == 200:
-        # code here
-        pass
+    # Натискаємо на кнопку
+	button.click()
+
+    # Закриваємо драйвер
+	driver.quit()
     
-    elif response.status_code == 404:
-        print('Не знайдено сторінки!')
-    
-    else:
-        print("Якась інша проблема з інтернет-зв'язком...")
+        # response = requests.get(base_url)
+
+        # if response.status_code == 200:
+        #     # code here
+        #     pass
+        
+        # elif response.status_code == 404:
+        #     print('Не знайдено сторінки!')
+        
+        # else:
+        #     print("Якась інша проблема з інтернет-зв'язком...")
 
 # ===========================================================================================
 
