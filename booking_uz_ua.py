@@ -146,13 +146,13 @@ def main():
     driver.get(base_url)
                
     # Знаходимо кнопку за атрибутами data-from-code та data-to-code
-	button = driver.find_element_by_css_selector('button[data-from-code="2200001"][data-to-code="2218000"]'))
+    button = driver.find_element_by_css_selector('button[data-from-code="2200001"][data-to-code="2218000"]'))
 
     # Натискаємо на кнопку
-	button.click()
+    button.click()
 
     # Закриваємо драйвер
-	driver.quit()
+    driver.quit()
     
         # response = requests.get(base_url)
 
