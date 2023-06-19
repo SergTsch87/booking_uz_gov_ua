@@ -7,7 +7,7 @@ from urllib.request import urlopen
 from datetime import datetime
 
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 
 
 # Отримуємо код html-сторінки
@@ -135,24 +135,32 @@ def get_sortedDict(dictionary):
 
 def main():
     # driver_path = '/path/to/driver'
-    driver = webdriver.Chrome(ChromeDriverManager().install())
+    # driver = webdriver.Chrome(ChromeDriverManager().install())
+    
+    # (don't forget to allow remote automation in your browser)
+    driver = webdriver.Safari()
     
     base_url = 'https://booking.uz.gov.ua/'
     
-    # Відкриваємо початкову сторінку
+    # open link
     driver.get(base_url)
+
+    # identify text box
+    tbox = driver.find_element_by_class_name("ui-autocomplete-input")
+    # send input:
+    tbox.send_keys("Кропивницький")
+    # send keyboard input:
+    tbox.send_keys(Keys.RETURN)
+    
+    # # # scroll down
+    # # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                
-    # Знаходимо кнопку за атрибутами data-from-code та data-to-code
-    # button = driver.find_element_by_css_selector('button[data-from-code="2200001"][data-to-code="2218000"]')
-    button = driver.find_element_by_css_selector(
-                button[
-                    'submit'
-                    ]
-                )
+    # # Знаходимо кнопку за атрибутами data-from-code та data-to-code
+    # # button = driver.find_element_by_css_selector('button[data-from-code="2200001"][data-to-code="2218000"]')
+    # button = driver.find_element_by_css_selector(button['submit'])
 
-
-    # Натискаємо на кнопку
-    button.click()
+    # # Натискаємо на кнопку
+    # button.click()
 
     # Закриваємо драйвер
     driver.quit()
