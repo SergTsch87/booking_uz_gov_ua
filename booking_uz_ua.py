@@ -8,6 +8,7 @@ from datetime import datetime
 
 from selenium import webdriver
 # from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.keys import Keys
 
 
 # Отримуємо код html-сторінки
@@ -48,50 +49,50 @@ def handle_exceptions(func):
 
     return wrapper
 
-# -------------------------------------------------------
+# # -------------------------------------------------------
 
-@handle_exceptions
-@timer
-def data_processing(func):
-    def wrapper():
-        new_collection = func()
-        # Тут опрацьовуємо колекцію даних new_collection
-        pass
-    return wrapper
+# @handle_exceptions
+# @timer
+# def data_processing(func):
+#     def wrapper():
+#         new_collection = func()
+#         # Тут опрацьовуємо колекцію даних new_collection
+#         pass
+#     return wrapper
 
-# ---------------------------------------------------------
+# # ---------------------------------------------------------
 
-    # GET
+#     # GET
 
-# Дістаємо дані з XML-файлу, через GET-запит
-@data_processing
-def get_xml_data(url):
-    response = requests.get(url)
-    return xmltodict.parse(response.content)
-
-
-# Дістаємо дані з JSON-файлу, через GET-запит
-@data_processing
-def get_json_data(url):
-    response = urlopen(url)
-    return json.loads(response.read())
+# # # Дістаємо дані з XML-файлу, через GET-запит
+# # @data_processing
+# # def get_xml_data(url):
+# #     response = requests.get(url)
+# #     return xmltodict.parse(response.content)
 
 
-# Дістаємо дані з CSV-файлу, за адресою
-@data_processing
-def get_csv_data(url):
-    with open(url) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        return csv_reader
+# # Дістаємо дані з JSON-файлу, через GET-запит
+# @data_processing
+# def get_json_data(url):
+#     response = urlopen(url)
+#     return json.loads(response.read())
 
 
-# Прочитаємо дані з JSON-файлу
-def read_list_from_json_file(json_file_out):
-    with open(json_file_out, encoding="utf8") as write_file:
-        data = json.load(write_file)
-    return data
+# # Дістаємо дані з CSV-файлу, за адресою
+# @data_processing
+# def get_csv_data(url):
+#     with open(url) as csv_file:
+#         csv_reader = csv.reader(csv_file, delimiter=',')
+#         return csv_reader
 
-# ---------------------------------------------------------
+
+# # Прочитаємо дані з JSON-файлу
+# def read_list_from_json_file(json_file_out):
+#     with open(json_file_out, encoding="utf8") as write_file:
+#         data = json.load(write_file)
+#     return data
+
+# # ---------------------------------------------------------
 
     # SAVE
 
@@ -108,10 +109,10 @@ def save_data_to_json_file(some_data, json_file_in):
 
 # ---------------------------------------------------------
 
-def create_obj_bs4(base_url):
-    html_doc = get_html(base_url)
-    soup = BeautifulSoup (html_doc, 'html.parser')
-    return soup
+# def create_obj_bs4(base_url):
+#     html_doc = get_html(base_url)
+#     soup = BeautifulSoup (html_doc, 'html.parser')
+#     return soup
 
 
 def get_size_of_file_before_downloading(url):
@@ -134,11 +135,22 @@ def get_sortedDict(dictionary):
 # ---------------------------------------------------------------------------
 
 def main():
-    # driver_path = '/path/to/driver'
+    # options = webdriver.ChromeOptions()
+    # driver = webdriver.Chrome(options=options)
+    # driver_path = 'G:\Windows\Meni\Work\chromedriver\chromedriver.exe'
+    # driver = webdriver.Chrome(executable_path = driver_path)
+    # driver = webdriver.Chrome(driver_path)
+    driver = webdriver.Chrome()
+    
+    # chrome_options = webdriver.ChromeOptions()
+    # chrome_options.add_experimental_option("excludeSwitches", ['enable-automation'])
+    # driver = webdriver.Chrome(options=chrome_options)
+    
+    # driver = webdriver.Chrome(driver_path)
     # driver = webdriver.Chrome(ChromeDriverManager().install())
     
     # (don't forget to allow remote automation in your browser)
-    driver = webdriver.Safari()
+    # driver = webdriver.Safari()
     
     base_url = 'https://booking.uz.gov.ua/'
     
@@ -146,14 +158,16 @@ def main():
     driver.get(base_url)
 
     # identify text box
-    tbox = driver.find_element_by_class_name("ui-autocomplete-input")
+        # find_element_by_class_name - вже майже рік як не підтримується Selenium'ом
+        # tbox = driver.find_element_by_class_name("ui-autocomplete-input")
+    tbox = driver.find_element("class name", "ui-autocomplete-input")
     # send input:
     tbox.send_keys("Кропивницький")
     # send keyboard input:
     tbox.send_keys(Keys.RETURN)
     
-    # # # scroll down
-    # # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    # scroll down
+    # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                
     # # Знаходимо кнопку за атрибутами data-from-code та data-to-code
     # # button = driver.find_element_by_css_selector('button[data-from-code="2200001"][data-to-code="2218000"]')
