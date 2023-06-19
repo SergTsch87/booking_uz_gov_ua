@@ -7,7 +7,6 @@ from urllib.request import urlopen
 from datetime import datetime
 
 from selenium import webdriver
-# from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 
 
@@ -135,36 +134,12 @@ def get_sortedDict(dictionary):
 # ---------------------------------------------------------------------------
 
 def main():
-    # options = webdriver.ChromeOptions()
-    # driver = webdriver.Chrome(options=options)
-    # driver_path = 'G:\Windows\Meni\Work\chromedriver\chromedriver.exe'
-    # driver = webdriver.Chrome(executable_path = driver_path)
-    # driver = webdriver.Chrome(driver_path)
     driver = webdriver.Chrome()
-    
-    # chrome_options = webdriver.ChromeOptions()
-    # chrome_options.add_experimental_option("excludeSwitches", ['enable-automation'])
-    # driver = webdriver.Chrome(options=chrome_options)
-    
-    # driver = webdriver.Chrome(driver_path)
-    # driver = webdriver.Chrome(ChromeDriverManager().install())
-    
-    # (don't forget to allow remote automation in your browser)
-    # driver = webdriver.Safari()
-    
-    base_url = 'https://booking.uz.gov.ua/'
-    
-    # open link
-    driver.get(base_url)
-
-    # identify text box
-        # find_element_by_class_name - вже майже рік як не підтримується Selenium'ом
-        # tbox = driver.find_element_by_class_name("ui-autocomplete-input")
-    tbox = driver.find_element("class name", "ui-autocomplete-input")
-    # send input:
-    tbox.send_keys("Кропивницький")
-    # send keyboard input:
-    tbox.send_keys(Keys.RETURN)
+    base_url = 'https://booking.uz.gov.ua/'    
+    driver.get(base_url)   # open link
+    tbox = driver.find_element("class name", "ui-autocomplete-input")   # identify text box
+    tbox.send_keys("Кропивницький")   # send input
+    tbox.send_keys(Keys.RETURN)   # send keyboard input
     
     # scroll down
     # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -179,18 +154,6 @@ def main():
     # Закриваємо драйвер
     driver.quit()
     
-        # response = requests.get(base_url)
-
-        # if response.status_code == 200:
-        #     # code here
-        #     pass
-        
-        # elif response.status_code == 404:
-        #     print('Не знайдено сторінки!')
-        
-        # else:
-        #     print("Якась інша проблема з інтернет-зв'язком...")
-
 # ===========================================================================================
 
 
