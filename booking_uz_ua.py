@@ -4,6 +4,7 @@ import csv
 import requests # для отримання html-коду веб-сторінки за її URL'ом
 from urllib.request import urlopen
 
+import time
 from datetime import datetime
 
 from selenium import webdriver
@@ -131,15 +132,60 @@ def pdf_file_to_save(url_dis_pdf, new_name_file):
 def get_sortedDict(dictionary):
 	return sorted(dictionary.items(), key = lambda kv:(kv[1], kv[0]))
 
+
+
+# # -------------------------------------------------------
+# Декоратор для обмеження частоти виклику функції
+
+def throttle(wait_time):
+    def decorator(func):
+        last_excecution_time = 0
+
+        def wrapper(*args, **kwargs):
+            nonlocal last_excecution_time
+            current_time = time.time()
+            if current_time - last_excecution_time > wait_time:
+                last_excecution_time = current_time
+                return func(*args, **kwargs)
+            else:
+                print("Зачекайте, поки мине часовий інтервал")
+        return wrapper
+    return decorator
+
+# # -------------------------------------------------------
+
+@throttle(5) # Обмеження виклику раз на 5 секунд
+def send_input(driver, city, attr_txt_box):
+    # tbox = driver.find_element("class name", "ui-autocomplete-input")   # identify text box
+    tbox = driver.find_element("name", attr_txt_box)   # identify text box
+    tbox.send_keys(city)   # send input
+    tbox.send_keys(Keys.RETURN)   # send keyboard input
+
+
+
 # ---------------------------------------------------------------------------
 
 def main():
     driver = webdriver.Chrome()
     base_url = 'https://booking.uz.gov.ua/'    
     driver.get(base_url)   # open link
-    tbox = driver.find_element("class name", "ui-autocomplete-input")   # identify text box
-    tbox.send_keys("Кропивницький")   # send input
-    tbox.send_keys(Keys.RETURN)   # send keyboard input
+    
+    # # tbox = driver.find_element("class name", "ui-autocomplete-input")   # identify text box
+    # tbox = driver.find_element("name", "from-title")   # identify text box
+    # tbox.send_keys("Київ")   # send input
+    # tbox.send_keys(Keys.RETURN)   # send keyboard input
+
+    # tbox = driver.find_element("name", "to-title")   # identify text box
+    # tbox.send_keys("Львів")   # send input
+    # tbox.send_keys(Keys.RETURN)   # send keyboard input
+
+    city = "Київ"
+    attr_txt_box = "from-title"
+    send_input(driver, city, attr_txt_box)
+
+    city = "Львів"
+    attr_txt_box = "to-title"
+    send_input(driver, city, attr_txt_box)
     
     # scroll down
     # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
