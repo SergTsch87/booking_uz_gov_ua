@@ -213,8 +213,7 @@ def main():
     text_box.send_keys(city)   # send input
     # Зачекайте 1-2 секунд для відображення випадаючого списку
     wait = WebDriverWait(driver, 2)
-    # list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".ui-autocomplete li")))
-    list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#from-autocomplete")))
+    list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#from-autocomplete li:first-child")))
 
 	# Вибираємо перший елемент списку
     list_element.click()
@@ -241,8 +240,7 @@ def main():
     text_box.send_keys(city)   # send input
     # Зачекайте 1-2 секунд для відображення випадаючого списку
     wait = WebDriverWait(driver, 2)
-    # list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".ui-autocomplete li")))
-    list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#to-autocomplete")))
+    list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#to-autocomplete li:first-child")))
 
 	# Вибираємо перший елемент списку
     list_element.click()
