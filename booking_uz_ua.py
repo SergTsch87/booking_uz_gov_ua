@@ -9,21 +9,22 @@ from datetime import datetime
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
-# Отримуємо код html-сторінки
-def get_html(url):
-    header_s = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36'
-    }
-    r = requests.get(url, headers = header_s) # Response    
-    return r.text # повертає html-код сторінки (за адресою url)
+# # Отримуємо код html-сторінки
+# def get_html(url):
+#     header_s = {
+#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36'
+#     }
+#     r = requests.get(url, headers = header_s) # Response    
+#     return r.text # повертає html-код сторінки (за адресою url)
 
 
 # # # -------------------------------------------------------
 # Декоратор для заміру часу виконання функції
-
-import time
 
 def timer(func):
     def wrapper(*args, **kwargs):
@@ -154,12 +155,12 @@ def throttle(wait_time):
 
 # # -------------------------------------------------------
 
-@throttle(5) # Обмеження виклику раз на 5 секунд
-def send_input(driver, city, attr_txt_box):
-    # tbox = driver.find_element("class name", "ui-autocomplete-input")   # identify text box
-    tbox = driver.find_element("name", attr_txt_box)   # identify text box
-    tbox.send_keys(city)   # send input
-    tbox.send_keys(Keys.RETURN)   # send keyboard input
+# @throttle(25) # Обмеження виклику раз на 5 секунд
+# def send_input(driver, city, attr_txt_box):
+#     # text_box = driver.find_element("class name", "ui-autocomplete-input")   # identify text box
+#     text_box = driver.find_element("name", attr_txt_box)   # identify text box
+#     text_box.send_keys(city)   # send input
+#     # text_box.send_keys(Keys.RETURN)   # send keyboard input
 
 
 
@@ -170,23 +171,93 @@ def main():
     base_url = 'https://booking.uz.gov.ua/'    
     driver.get(base_url)   # open link
     
-    # # tbox = driver.find_element("class name", "ui-autocomplete-input")   # identify text box
-    # tbox = driver.find_element("name", "from-title")   # identify text box
-    # tbox.send_keys("Київ")   # send input
-    # tbox.send_keys(Keys.RETURN)   # send keyboard input
+    # # text_box = driver.find_element("class name", "ui-autocomplete-input")   # identify text box
+    # text_box = driver.find_element("name", "from-title")   # identify text box
+    # text_box.send_keys("Київ")   # send input
+    # text_box.send_keys(Keys.RETURN)   # send keyboard input
 
-    # tbox = driver.find_element("name", "to-title")   # identify text box
-    # tbox.send_keys("Львів")   # send input
-    # tbox.send_keys(Keys.RETURN)   # send keyboard input
+    # text_box = driver.find_element("name", "to-title")   # identify text box
+    # text_box.send_keys("Львів")   # send input
+    # text_box.send_keys(Keys.RETURN)   # send keyboard input
+
+
+    # wait_time = 25
+    # current_time = time.time()
+    
+    # if current_time - last_excecution_time > wait_time:
+    #     last_excecution_time = current_time
+        
+    #     city = "Київ"
+    #     attr_txt_box = "from-title"
+    #     send_input(driver, city, attr_txt_box)
+    
+    # else:
+    #     print("Зачекайте, поки мине часовий інтервал")
+    
+
+    # if current_time - last_excecution_time > wait_time:
+    #     last_excecution_time = current_time
+        
+    #     city = "Львів"
+    #     attr_txt_box = "to-title"
+    #     send_input(driver, city, attr_txt_box)
+    
+    # else:
+    #     print("Зачекайте, поки мине часовий інтервал")
+
 
     city = "Київ"
     attr_txt_box = "from-title"
-    send_input(driver, city, attr_txt_box)
+    # send_input(driver, city, attr_txt_box)
+    text_box = driver.find_element("name", attr_txt_box)   # identify text box
+    text_box.send_keys(city)   # send input
+    # Зачекайте 1-2 секунд для відображення випадаючого списку
+    wait = WebDriverWait(driver, 2)
+    # list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".ui-autocomplete li")))
+    list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#from-autocomplete")))
+
+	# Вибираємо перший елемент списку
+    list_element.click()
+
+    # Перевірка, чи місто вибране в полі введення
+    # selected_city = text_box.get_attribute("value")
+    # print("Вибране місто:", selected_city)
+    
+    # Перевірка, чи місто вибране в полі введення
+    selected_city = text_box.get_attribute("value")
+    # print("Вибране місто:", selected_city)
+    if selected_city == text_box.get_attribute("value"):
+        print("Місто", selected_city, "вибране в полі введення для першого поля.")
+    else:
+        print("Місто", selected_city, "не відповідає першому елементу списку для першого поля.")
+
+
+    # time.sleep(5)
 
     city = "Львів"
     attr_txt_box = "to-title"
-    send_input(driver, city, attr_txt_box)
-    
+    # send_input(driver, city, attr_txt_box)
+    text_box = driver.find_element("name", attr_txt_box)   # identify text box
+    text_box.send_keys(city)   # send input
+    # Зачекайте 1-2 секунд для відображення випадаючого списку
+    wait = WebDriverWait(driver, 2)
+    # list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".ui-autocomplete li")))
+    list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#to-autocomplete")))
+
+	# Вибираємо перший елемент списку
+    list_element.click()
+
+    # Перевірка, чи місто вибране в полі введення
+    selected_city = text_box.get_attribute("value")
+    # print("Вибране місто:", selected_city)
+    if selected_city == text_box.get_attribute("value"):
+        print("Місто", selected_city, "вибране в полі введення для другого поля.")
+    else:
+        print("Місто", selected_city, "не відповідає першому елементу списку для другого поля.")
+
+    # time.sleep(15)
+
+
     # scroll down
     # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                
