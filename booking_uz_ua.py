@@ -3,6 +3,7 @@ import json
 import csv
 import requests # для отримання html-коду веб-сторінки за її URL'ом
 from urllib.request import urlopen
+import xmltodict
 
 import time
 from datetime import datetime
@@ -65,18 +66,18 @@ def handle_exceptions(func):
 
 #     # GET
 
-# # # Дістаємо дані з XML-файлу, через GET-запит
-# # @data_processing
-# # def get_xml_data(url):
-# #     response = requests.get(url)
-# #     return xmltodict.parse(response.content)
+# Дістаємо дані з XML-файлу, через GET-запит
+@data_processing
+def get_xml_data(url):
+    response = requests.get(url)
+    return xmltodict.parse(response.content)
 
 
-# # Дістаємо дані з JSON-файлу, через GET-запит
-# @data_processing
-# def get_json_data(url):
-#     response = urlopen(url)
-#     return json.loads(response.read())
+# Дістаємо дані з JSON-файлу, через GET-запит
+@data_processing
+def get_json_data(url):
+    response = urlopen(url)
+    return json.loads(response.read())
 
 
 # # Дістаємо дані з CSV-файлу, за адресою
@@ -128,30 +129,27 @@ def pdf_file_to_save(url_dis_pdf, new_name_file):
         f.write(response.content)
 
 
-
 # Сортування словника dictionary
 def get_sortedDict(dictionary):
 	return sorted(dictionary.items(), key = lambda kv:(kv[1], kv[0]))
 
-
-
 # # -------------------------------------------------------
 # Декоратор для обмеження частоти виклику функції
 
-def throttle(wait_time):
-    def decorator(func):
-        last_excecution_time = 0
+# def throttle(wait_time):
+#     def decorator(func):
+#         last_excecution_time = 0
 
-        def wrapper(*args, **kwargs):
-            nonlocal last_excecution_time
-            current_time = time.time()
-            if current_time - last_excecution_time > wait_time:
-                last_excecution_time = current_time
-                return func(*args, **kwargs)
-            else:
-                print("Зачекайте, поки мине часовий інтервал")
-        return wrapper
-    return decorator
+#         def wrapper(*args, **kwargs):
+#             nonlocal last_excecution_time
+#             current_time = time.time()
+#             if current_time - last_excecution_time > wait_time:
+#                 last_excecution_time = current_time
+#                 return func(*args, **kwargs)
+#             else:
+#                 print("Зачекайте, поки мине часовий інтервал")
+#         return wrapper
+#     return decorator
 
 # # -------------------------------------------------------
 
@@ -162,112 +160,12 @@ def throttle(wait_time):
 #     text_box.send_keys(city)   # send input
 #     # text_box.send_keys(Keys.RETURN)   # send keyboard input
 
-
-
 # ---------------------------------------------------------------------------
 
 def main():
-    driver = webdriver.Chrome()
-    base_url = 'https://booking.uz.gov.ua/'    
-    driver.get(base_url)   # open link
-    
-    # # text_box = driver.find_element("class name", "ui-autocomplete-input")   # identify text box
-    # text_box = driver.find_element("name", "from-title")   # identify text box
-    # text_box.send_keys("Київ")   # send input
-    # text_box.send_keys(Keys.RETURN)   # send keyboard input
-
-    # text_box = driver.find_element("name", "to-title")   # identify text box
-    # text_box.send_keys("Львів")   # send input
-    # text_box.send_keys(Keys.RETURN)   # send keyboard input
-
-
-    # wait_time = 25
-    # current_time = time.time()
-    
-    # if current_time - last_excecution_time > wait_time:
-    #     last_excecution_time = current_time
-        
-    #     city = "Київ"
-    #     attr_txt_box = "from-title"
-    #     send_input(driver, city, attr_txt_box)
-    
-    # else:
-    #     print("Зачекайте, поки мине часовий інтервал")
-    
-
-    # if current_time - last_excecution_time > wait_time:
-    #     last_excecution_time = current_time
-        
-    #     city = "Львів"
-    #     attr_txt_box = "to-title"
-    #     send_input(driver, city, attr_txt_box)
-    
-    # else:
-    #     print("Зачекайте, поки мине часовий інтервал")
-
-
-    city = "Київ"
-    attr_txt_box = "from-title"
-    # send_input(driver, city, attr_txt_box)
-    text_box = driver.find_element("name", attr_txt_box)   # identify text box
-    text_box.send_keys(city)   # send input
-    # Зачекайте 1-2 секунд для відображення випадаючого списку
-    wait = WebDriverWait(driver, 2)
-    list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#from-autocomplete li:first-child")))
-
-	# Вибираємо перший елемент списку
-    list_element.click()
-
-    # Перевірка, чи місто вибране в полі введення
-    # selected_city = text_box.get_attribute("value")
-    # print("Вибране місто:", selected_city)
-    
-    # Перевірка, чи місто вибране в полі введення
-    selected_city = text_box.get_attribute("value")
-    # print("Вибране місто:", selected_city)
-    if selected_city == text_box.get_attribute("value"):
-        print("Місто", selected_city, "вибране в полі введення для першого поля.")
-    else:
-        print("Місто", selected_city, "не відповідає першому елементу списку для першого поля.")
-
-
-    # time.sleep(5)
-
-    city = "Львів"
-    attr_txt_box = "to-title"
-    # send_input(driver, city, attr_txt_box)
-    text_box = driver.find_element("name", attr_txt_box)   # identify text box
-    text_box.send_keys(city)   # send input
-    # Зачекайте 1-2 секунд для відображення випадаючого списку
-    wait = WebDriverWait(driver, 2)
-    list_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#to-autocomplete li:first-child")))
-
-	# Вибираємо перший елемент списку
-    list_element.click()
-
-    # Перевірка, чи місто вибране в полі введення
-    selected_city = text_box.get_attribute("value")
-    # print("Вибране місто:", selected_city)
-    if selected_city == text_box.get_attribute("value"):
-        print("Місто", selected_city, "вибране в полі введення для другого поля.")
-    else:
-        print("Місто", selected_city, "не відповідає першому елементу списку для другого поля.")
-
-    # time.sleep(15)
-
-
-    # scroll down
-    # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-               
-    # # Знаходимо кнопку за атрибутами data-from-code та data-to-code
-    # # button = driver.find_element_by_css_selector('button[data-from-code="2200001"][data-to-code="2218000"]')
-    # button = driver.find_element_by_css_selector(button['submit'])
-
-    # # Натискаємо на кнопку
-    # button.click()
-
-    # Закриваємо драйвер
-    driver.quit()
+    url = 'https://booking.uz.gov.ua/?from=2200001&to=2204001&date=2023-06-22&time=19%3A00&train=064%D0%9A&wagon_type_id=%D0%9B&wagon_num=4&url=train-wagons'
+    data = get_xml_data(url)
+    print(data)
     
 # ===========================================================================================
 
