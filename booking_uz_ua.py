@@ -3,6 +3,7 @@ import json
 import csv
 import requests # для отримання html-коду веб-сторінки за її URL'ом
 from urllib.request import urlopen
+from urllib.parse import quote
 import xmltodict
 
 import time
@@ -67,14 +68,14 @@ def handle_exceptions(func):
 #     # GET
 
 # Дістаємо дані з XML-файлу, через GET-запит
-@data_processing
+# @data_processing
 def get_xml_data(url):
     response = requests.get(url)
     return xmltodict.parse(response.content)
 
 
 # Дістаємо дані з JSON-файлу, через GET-запит
-@data_processing
+# @data_processing
 def get_json_data(url):
     response = urlopen(url)
     return json.loads(response.read())
@@ -164,8 +165,13 @@ def get_sortedDict(dictionary):
 
 def main():
     url = 'https://booking.uz.gov.ua/?from=2200001&to=2204001&date=2023-06-22&time=19%3A00&train=064%D0%9A&wagon_type_id=%D0%9B&wagon_num=4&url=train-wagons'
-    data = get_xml_data(url)
-    print(data)
+    encoded_url = quote(url, safe=':/?&=')
+    # data = get_xml_data(url)
+    # print(data)
+
+    # response = requests.get(url)
+    response = requests.get(encoded_url)
+    print(response.content)
     
 # ===========================================================================================
 
